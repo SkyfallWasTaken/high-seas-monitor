@@ -1,5 +1,22 @@
 import type { ShopItem, ShopItems } from ".";
 
+interface Update {
+  type:
+    | "added"
+    | "removed"
+    | "priceChangeGlobal"
+    | "priceChangeUs"
+    | "stockStatusUpdate"
+    | "fulfillmentTimeUpdate"
+    | "comingSoonUpdate"
+    | "regionAvailabilityUpdate"
+    | "nameChange"
+    | "subtitleChange"
+    | "imageUrlChange";
+    item: ShopItem;
+    prevPriceGlobal: number;
+}
+
 export function diff(oldItems: ShopItems, newItems: ShopItems) {
   let updates = [];
   const addedItems = newItems.filter(
@@ -107,6 +124,8 @@ export function diff(oldItems: ShopItems, newItems: ShopItems) {
       });
     }
   }
+
+  return updates;
 }
 
 type RegionAvailability = {

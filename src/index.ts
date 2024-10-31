@@ -1,7 +1,7 @@
 import "dotenv/config";
 import { z } from "zod";
 import { chromium } from "playwright";
-import { writeFile, exists } from "fs/promises";
+import { writeFile, exists, mkdir } from "fs/promises";
 import { readFile } from "fs/promises";
 import { diff } from "./diff";
 
@@ -57,12 +57,17 @@ const shopItems = ShopItems.parse(JSON.parse(rawJson).value);
 console.log(shopItems);
 const time = Date.now();
 
-console.log(`Writing latest data to data/${time}.json`);
-await writeFile(`data/${time}.json`, JSON.stringify(shopItems, null, 2));
-
+if (!(await exists("data"))) {
+  console.warn("data directory does not exist, creating it.");
+  await mkdir("data");
+}
 if (!(await exists("latest.highseas"))) {
   console.warn("latest.highseas does not exist, creating it and exiting.");
   await writeFile("latest.highseas", time.toString());
+  await writeFile(
+    `data/${time}.json`,
+    JSON.stringify(diff([], shopItems), null, 2)
+  );
   await browser.close();
   process.exit(0);
 }
@@ -73,6 +78,6 @@ const previousShopItems = ShopItems.parse(
   JSON.parse(await readFile(`data/${previousTime}.json`, "utf-8"))
 );
 const diffs = diff(previousShopItems, shopItems);
-console.log(diffs);
+await writeFile(`data/${time}.json`, JSON.stringify(diffs, null, 2));
 
 await browser.close();
