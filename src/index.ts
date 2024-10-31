@@ -3,7 +3,6 @@ import { z } from "zod";
 import { chromium } from "playwright";
 import { writeFile, exists, mkdir } from "fs/promises";
 import { readFile } from "fs/promises";
-import { diff } from "./diff";
 
 const Env = z.object({
   HIGHSEAS_SESSION_TOKEN: z.string(),
@@ -54,20 +53,18 @@ if (!rawJson) {
   throw new Error("Could not find cache.shopItems in localStorage");
 }
 const shopItems = ShopItems.parse(JSON.parse(rawJson).value);
-console.log(shopItems);
-const time = Date.now();
 
+const time = Date.now();
 if (!(await exists("data"))) {
   console.warn("data directory does not exist, creating it.");
   await mkdir("data");
 }
+
+await writeFile(`data/${time}.json`, JSON.stringify(shopItems, null, 2));
+
 if (!(await exists("latest.highseas"))) {
   console.warn("latest.highseas does not exist, creating it and exiting.");
   await writeFile("latest.highseas", time.toString());
-  await writeFile(
-    `data/${time}.json`,
-    JSON.stringify(diff([], shopItems), null, 2)
-  );
   await browser.close();
   process.exit(0);
 }
@@ -77,7 +74,7 @@ console.log(`Reading previous data from data/${previousTime}.json`);
 const previousShopItems = ShopItems.parse(
   JSON.parse(await readFile(`data/${previousTime}.json`, "utf-8"))
 );
-const diffs = diff(previousShopItems, shopItems);
-await writeFile(`data/${time}.json`, JSON.stringify(diffs, null, 2));
+await writeFile("latest.highseas", time.toString());
+// const diffs = diff(previousShopItems, shopItems);
 
 await browser.close();
