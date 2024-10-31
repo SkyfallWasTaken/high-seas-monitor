@@ -1,16 +1,20 @@
 {
   "name": "high-seas-monitor",
+  "version": "1.0.0",
   "module": "src/index.ts",
   "type": "module",
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "@types/common-tags": "^1.8.4"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
   },
   "dependencies": {
+    "common-tags": "^1.8.2",
     "cookie": "^1.0.1",
     "dotenv": "^16.4.5",
+    "git-last-commit": "^1.0.1",
     "node-html-parser": "^6.1.13",
     "playwright": "^1.48.2",
     "zod": "^3.23.8"

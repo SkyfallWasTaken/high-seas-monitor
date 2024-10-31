@@ -3,9 +3,12 @@ import { z } from "zod";
 import { chromium } from "playwright";
 import { writeFile, exists, mkdir } from "fs/promises";
 import { readFile } from "fs/promises";
+import { getSlackBlocks } from "./slack";
+import { diffItems } from "./diff";
 
 const Env = z.object({
   HIGHSEAS_SESSION_TOKEN: z.string(),
+  SLACK_WEBHOOK_URL: z.string().url(),
 });
 const ShopItem = z.object({
   id: z.string(),
@@ -75,6 +78,25 @@ const previousShopItems = ShopItems.parse(
   JSON.parse(await readFile(`data/${previousTime}.json`, "utf-8"))
 );
 await writeFile("latest.highseas", time.toString());
-// const diffs = diff(previousShopItems, shopItems);
+
+const diffs = diffItems(previousShopItems, shopItems);
+if (diffs.length === 0) {
+  console.log("No changes detected");
+  await browser.close();
+  process.exit(0);
+}
+
+const blocks = getSlackBlocks(diffs);
+const response = await fetch(env.SLACK_WEBHOOK_URL, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify(blocks),
+});
+console.log(JSON.stringify(blocks, null, 2));
+if (!response.ok) {
+  throw new Error(`Failed to send Slack message: ${response.statusText}`);
+}
 
 await browser.close();
