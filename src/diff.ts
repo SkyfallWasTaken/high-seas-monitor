@@ -75,7 +75,7 @@ export function diffItems(
     if (!oldItem) {
       result.push(
         stripIndents`
-        *New item:*
+        *New item: :blobby-heavy_plus_sign:*
         *Name:* ${newItem.name}
         *Description:* ${newItem.subtitle || "(none)"}
         *Regions:* ${regionText(newItem)}
@@ -87,6 +87,18 @@ export function diffItems(
         `.trim()
       );
       continue;
+    }
+
+    for (const oldItem of oldItems) {
+      if (!newItems.find((item) => item.id === oldItem.id)) {
+        result.push(
+          stripIndents`
+          *Deleted item: :tw_warning:*
+          *Name:* ${newItem.name}
+          *Description:* ${newItem.subtitle || "(none)"}
+          `.trim()
+        );
+      }
     }
 
     try {
