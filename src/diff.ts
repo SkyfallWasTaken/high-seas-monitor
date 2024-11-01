@@ -29,11 +29,13 @@ export function diffItem(oldItem: ShopItem, newItem: ShopItem) {
 
   // Price
   if (oldItem.priceUs !== newItem.priceUs) {
-    result.push(`*Price (US):* $${oldItem.priceUs} → $${newItem.priceUs}`);
+    result.push(
+      `*Price (US):* :doubloon: ${oldItem.priceUs} → :doubloon: ${newItem.priceUs}`
+    );
   }
   if (oldItem.priceGlobal !== newItem.priceGlobal) {
     result.push(
-      `*Price (Global):* $${oldItem.priceGlobal} → $${newItem.priceGlobal}`
+      `*Price (Global):* :doubloon: ${oldItem.priceGlobal} → :doubloon: ${newItem.priceGlobal}`
     );
   }
 
