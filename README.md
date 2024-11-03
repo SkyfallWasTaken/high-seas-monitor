@@ -28,4 +28,5 @@ bun run src/index.ts
 ---
 
 _© 2024 [Mahad Kalam](https://skyfall.dev)_
+
 _Licensed under the MIT License_
