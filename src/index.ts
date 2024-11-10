@@ -1,3 +1,4 @@
+import "../instrument";
 import "dotenv/config";
 import { z } from "zod";
 import { chromium } from "playwright";
@@ -9,6 +10,7 @@ import { diffItems } from "./diff";
 const Env = z.object({
   HIGHSEAS_SESSION_TOKEN: z.string(),
   SLACK_WEBHOOK_URL: z.string().url(),
+  SENTRY_DSN: z.string().url(),
 });
 const ShopItem = z.object({
   id: z.string(),
