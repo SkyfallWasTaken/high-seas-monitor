@@ -11,7 +11,8 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "@sentry/bun": "^8.37.1",
+    "@sentry/node": "^8.37.1",
+    "@sentry/profiling-node": "^8.37.1",
     "common-tags": "^1.8.2",
     "cookie": "^1.0.1",
     "dotenv": "^16.4.5",
