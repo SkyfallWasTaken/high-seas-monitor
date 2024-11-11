@@ -16,7 +16,7 @@ jobs:
             : # Load nix binaries
             export PATH=/home/skyfall/.nix-profile/bin:$PATH
             export PATH=/nix/skyfall/nix/profiles/default/bin:$PATH
-            cd /home/skyfall/bluemark
+            cd /home/skyfall/high-seas-monitor
             git pull
             bun install
-            systemctl --user restart bluemark.service
+            systemctl --user restart high-seas-monitor.service
