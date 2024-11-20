@@ -81,8 +81,8 @@ export function diffItems(
         *Name:* ${newItem.name}
         *Description:* ${newItem.subtitle || "(none)"}
         *Regions:* ${regionText(newItem)}
-        *Price (US):* :doubloons: ${newItem.priceUs}
-        *Price (Global):* :doubloons: ${newItem.priceGlobal}
+        *Price (US):* :doubloon: ${newItem.priceUs}
+        *Price (Global):* :doubloon: ${newItem.priceGlobal}
         *Released:* ${!newItem.comingSoon ? "Yes" : "No"}
         *In Stock:* ${!newItem.outOfStock ? "Yes" : "No"}
         *Fulfilled at End:* ${newItem.fulfilledAtEnd ? "Yes" : "No"}
