@@ -20,3 +20,4 @@ jobs:
             git pull
             bun install
             systemctl --user restart high-seas-monitor.service
+            echo "Done!"
