@@ -40,12 +40,12 @@ context.addCookies([
     name: "hs-session",
     path: "/",
     value: decodeURIComponent(env.HIGHSEAS_SESSION_TOKEN),
-    domain: "highseas.hackclub.com",
+    domain: "high-seas.hackclub.dev",
   },
 ]);
 
 const page = await context.newPage();
-await page.goto("https://highseas.hackclub.com/shop", {
+await page.goto("https://high-seas.hackclub.dev/shop", {
   waitUntil: "networkidle",
 });
 
