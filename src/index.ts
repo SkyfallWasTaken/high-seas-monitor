@@ -11,6 +11,7 @@ const Env = z.object({
   HIGHSEAS_SESSION_TOKEN: z.string(),
   SLACK_WEBHOOK_URL: z.string().url(),
   SENTRY_DSN: z.string().url(),
+  SLACK_SUBTEAM_ID: z.string(),
 });
 const ShopItem = z.object({
   id: z.string(),
@@ -99,6 +100,20 @@ const response = await fetch(env.SLACK_WEBHOOK_URL, {
 console.log(JSON.stringify(blocks, null, 2));
 if (!response.ok) {
   throw new Error(`Failed to send Slack message: ${response.statusText}`);
+} else {
+  await fetch(env.SLACK_WEBHOOK_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify([{
+      type: "section",
+      text: {
+        type: "mrkdwn",
+        text: `<!subteam^${env.SLACK_SUBTEAM_ID}>\n*Please respond in the thread above*`,
+      }
+    }])
+  })
 }
 
 await browser.close();
