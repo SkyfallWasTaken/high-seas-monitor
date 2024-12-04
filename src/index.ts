@@ -109,7 +109,7 @@ if (!response.ok) {
       type: "section",
       text: {
         type: "mrkdwn",
-        text: `<!subteam^${process.env.SLACK_SUBTEAM_ID}>\n*Please respond in the thread above*`,
+        text: `<!subteam^${env.SLACK_SUBTEAM_ID}>\n*Please respond in the thread above*`,
       }
     }])
   })
