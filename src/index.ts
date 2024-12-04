@@ -99,6 +99,20 @@ const response = await fetch(env.SLACK_WEBHOOK_URL, {
 console.log(JSON.stringify(blocks, null, 2));
 if (!response.ok) {
   throw new Error(`Failed to send Slack message: ${response.statusText}`);
+} else {
+  await fetch(env.SLACK_WEBHOOK_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify([{
+      type: "section",
+      text: {
+        type: "mrkdwn",
+        text: `<!subteam^${process.env.SLACK_SUBTEAM_ID}>`,
+      }
+    }])
+  })
 }
 
 await browser.close();
