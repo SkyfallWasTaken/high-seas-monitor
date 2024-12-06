@@ -106,13 +106,17 @@ if (!response.ok) {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify([{
-      type: "section",
-      text: {
-        type: "mrkdwn",
-        text: `<!subteam^${env.SLACK_SUBTEAM_ID}>\n*Please respond in the thread above*`,
-      }
-    }])
+    body: JSON.stringify([
+      blocks: [
+		    {
+			    type: "section",
+			    text: {
+				    type: "mrkdwn",
+				    text: "<!subteam^S083BPYJXE2> *- please reply to the message above*"
+			    }
+		    }
+	    ]
+    ])
   })
 }
 
