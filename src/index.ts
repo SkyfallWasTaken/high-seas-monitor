@@ -106,18 +106,18 @@ if (!response.ok) {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify([
+    body: JSON.stringify({
       blocks: [
-		    {
-			    type: "section",
-			    text: {
-				    type: "mrkdwn",
-				    text: "<!subteam^S083BPYJXE2> *- please reply to the message above*"
-			    }
-		    }
-	    ]
-    ])
-  })
+        {
+          type: "section",
+          text: {
+            type: "mrkdwn",
+            text: "<!subteam^S083BPYJXE2> *- please reply to the message above*",
+          },
+        },
+      ],
+    }),
+  });
 }
 
 await browser.close();
