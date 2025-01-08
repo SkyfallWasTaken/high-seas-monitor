@@ -3,80 +3,80 @@ import { stripIndents } from "common-tags";
 import { deepEquals } from "bun";
 
 export function diffItem(oldItem: ShopItem, newItem: ShopItem) {
-  if (deepEquals(oldItem, newItem)) return;
-  const result = [];
+	if (deepEquals(oldItem, newItem)) return;
+	const result = [];
 
-  // Metadata
-  if (oldItem.name !== newItem.name) {
-    result.push(`*Name:* ${oldItem.name} → ${newItem.name}`);
-  } else {
-    result.push(`*Name:* ${oldItem.name}`);
-  }
-  if (oldItem.subtitle !== newItem.subtitle) {
-    result.push(
-      `*Description:* ${oldItem.subtitle || "(none)"} → ${
-        newItem.subtitle || "(none)"
-      }`
-    );
-  }
+	// Metadata
+	if (oldItem.name !== newItem.name) {
+		result.push(`*Name:* ${oldItem.name} → ${newItem.name}`);
+	} else {
+		result.push(`*Name:* ${oldItem.name}`);
+	}
+	if (oldItem.subtitle !== newItem.subtitle) {
+		result.push(
+			`*Description:* ${oldItem.subtitle || "(none)"} → ${
+				newItem.subtitle || "(none)"
+			}`
+		);
+	}
 
-  // Regions
-  const oldRegions = regionText(oldItem);
-  const newRegions = regionText(newItem);
-  if (oldRegions !== newRegions) {
-    result.push(`*Regions:* ${oldRegions} → ${newRegions}`);
-  }
+	// Regions
+	const oldRegions = regionText(oldItem);
+	const newRegions = regionText(newItem);
+	if (oldRegions !== newRegions) {
+		result.push(`*Regions:* ${oldRegions} → ${newRegions}`);
+	}
 
-  // Price
-  if (oldItem.priceUs !== newItem.priceUs) {
-    result.push(
-      `*Price (US):* :doubloon: ${oldItem.priceUs} → :doubloon: ${newItem.priceUs}`
-    );
-  }
-  if (oldItem.priceGlobal !== newItem.priceGlobal) {
-    result.push(
-      `*Price (Global):* :doubloon: ${oldItem.priceGlobal} → :doubloon: ${newItem.priceGlobal}`
-    );
-  }
+	// Price
+	if (oldItem.priceUs !== newItem.priceUs) {
+		result.push(
+			`*Price (US):* :doubloon: ${oldItem.priceUs} → :doubloon: ${newItem.priceUs}`
+		);
+	}
+	if (oldItem.priceGlobal !== newItem.priceGlobal) {
+		result.push(
+			`*Price (Global):* :doubloon: ${oldItem.priceGlobal} → :doubloon: ${newItem.priceGlobal}`
+		);
+	}
 
-  // Status and Fulfillment
-  if (oldItem.comingSoon !== newItem.comingSoon) {
-    result.push(
-      `*Released:* ${!oldItem.comingSoon ? "Yes" : "No"} → ${
-        !newItem.comingSoon ? "Yes" : "No"
-      }`
-    );
-  }
-  if (oldItem.outOfStock !== newItem.outOfStock) {
-    result.push(
-      `*In Stock:* ${!oldItem.outOfStock ? "Yes" : "No"} → ${
-        !newItem.outOfStock ? "Yes" : "No"
-      }`
-    );
-  }
-  if (oldItem.fulfilledAtEnd !== newItem.fulfilledAtEnd) {
-    result.push(
-      `*Fulfilled at End:* ${oldItem.fulfilledAtEnd ? "Yes" : "No"} → ${
-        newItem.fulfilledAtEnd ? "Yes" : "No"
-      }`
-    );
-  }
+	// Status and Fulfillment
+	if (oldItem.comingSoon !== newItem.comingSoon) {
+		result.push(
+			`*Released:* ${!oldItem.comingSoon ? "Yes" : "No"} → ${
+				!newItem.comingSoon ? "Yes" : "No"
+			}`
+		);
+	}
+	if (oldItem.outOfStock !== newItem.outOfStock) {
+		result.push(
+			`*In Stock:* ${!oldItem.outOfStock ? "Yes" : "No"} → ${
+				!newItem.outOfStock ? "Yes" : "No"
+			}`
+		);
+	}
+	if (oldItem.fulfilledAtEnd !== newItem.fulfilledAtEnd) {
+		result.push(
+			`*Fulfilled at End:* ${oldItem.fulfilledAtEnd ? "Yes" : "No"} → ${
+				newItem.fulfilledAtEnd ? "Yes" : "No"
+			}`
+		);
+	}
 
-  return result.join("\n");
+	return result.join("\n");
 }
 
 export function diffItems(
-  oldItems: ShopItem[],
-  newItems: ShopItem[]
+	oldItems: ShopItem[],
+	newItems: ShopItem[]
 ): string[] {
-  const result: string[] = [];
-  const oldItemsMap = new Map(oldItems.map((item) => [item.id, item]));
+	const result: string[] = [];
+	const oldItemsMap = new Map(oldItems.map((item) => [item.id, item]));
 
-  for (const newItem of newItems) {
-    const oldItem = oldItemsMap.get(newItem.id);
-    if (!oldItem) {
-      result.push(
-        stripIndents`
+	for (const newItem of newItems) {
+		const oldItem = oldItemsMap.get(newItem.id);
+		if (!oldItem) {
+			result.push(
+				stripIndents`
         *New item: :blobby-heavy_plus_sign:*
         *Name:* ${newItem.name}
         *Description:* ${newItem.subtitle || "(none)"}
@@ -87,41 +87,41 @@ export function diffItems(
         *In Stock:* ${!newItem.outOfStock ? "Yes" : "No"}
         *Fulfilled at End:* ${newItem.fulfilledAtEnd ? "Yes" : "No"}
         `.trim()
-      );
-      continue;
-    }
+			);
+			continue;
+		}
 
-    for (const oldItem of oldItems) {
-      if (!newItems.find((item) => item.id === oldItem.id)) {
-        result.push(
-          stripIndents`
+		for (const oldItem of oldItems) {
+			if (!newItems.find((item) => item.id === oldItem.id)) {
+				result.push(
+					stripIndents`
           *Deleted item: :tw_warning:*
           *Name:* ${newItem.name}
           *Description:* ${newItem.subtitle || "(none)"}
           `.trim()
-        );
-      }
-    }
+				);
+			}
+		}
 
-    try {
-      const diff = diffItem(oldItem, newItem);
-      if (diff) {
-        result.push(diff);
-      }
-    } catch (error) {
-      console.error(`Error diffing items with id ${newItem.id}:`, error);
-    }
-  }
+		try {
+			const diff = diffItem(oldItem, newItem);
+			if (diff) {
+				result.push(diff);
+			}
+		} catch (error) {
+			console.error(`Error diffing items with id ${newItem.id}:`, error);
+		}
+	}
 
-  return result;
+	return result;
 }
 
 function regionText(item: ShopItem) {
-  const regions = [];
-  if (item.enabledUs) regions.push("US");
-  if (item.enabledEu) regions.push("EU + UK");
-  if (item.enabledIn) regions.push("IN");
-  if (item.enabledCa) regions.push("CA");
-  if (item.enabledXx) regions.push("Global");
-  return regions.join(", ");
+	const regions = [];
+	if (item.enabledUs) regions.push("US");
+	if (item.enabledEu) regions.push("EU + UK");
+	if (item.enabledIn) regions.push("IN");
+	if (item.enabledCa) regions.push("CA");
+	if (item.enabledXx) regions.push("Global");
+	return regions.join(", ");
 }
