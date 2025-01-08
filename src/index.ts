@@ -6,6 +6,8 @@ import { writeFile, exists, mkdir } from "fs/promises";
 import { readFile } from "fs/promises";
 import { getSlackBlocks } from "./slack";
 import { diffItems } from "./diff";
+import { fromError as fromZodError } from "zod-validation-error";
+import ignoredItems from "../ignore.json";
 
 const Env = z.object({
 	HIGHSEAS_SESSION_TOKEN: z.string(),
@@ -58,8 +60,15 @@ const rawJson = localStorage.find(
 if (!rawJson) {
 	throw new Error("Could not find cache.shopItems in localStorage");
 }
-console.log(rawJson);
-const shopItems = ShopItems.parse(JSON.parse(rawJson).value);
+const json = JSON.parse(rawJson);
+const items = json.value;
+const filteredItems = items.filter(
+	(item: { id: string }) => !ignoredItems.includes(item.id)
+);
+const shopItems = ShopItems.safeParse(filteredItems);
+if (shopItems.success === false) {
+	throw fromZodError(shopItems.error);
+}
 
 const time = Date.now();
 if (!(await exists("data"))) {
@@ -67,7 +76,7 @@ if (!(await exists("data"))) {
 	await mkdir("data");
 }
 
-await writeFile(`data/${time}.json`, JSON.stringify(shopItems, null, 2));
+await writeFile(`data/${time}.json`, JSON.stringify(shopItems.data, null, 2));
 
 if (!(await exists("latest.highseas"))) {
 	console.warn("latest.highseas does not exist, creating it and exiting.");
@@ -83,7 +92,7 @@ const previousShopItems = ShopItems.parse(
 );
 await writeFile("latest.highseas", time.toString());
 
-const diffs = diffItems(previousShopItems, shopItems);
+const diffs = diffItems(previousShopItems, shopItems.data);
 if (diffs.length === 0) {
 	console.log("No changes detected");
 	await browser.close();
