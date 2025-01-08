@@ -58,6 +58,7 @@ const rawJson = localStorage.find(
 if (!rawJson) {
   throw new Error("Could not find cache.shopItems in localStorage");
 }
+console.log(rawJson);
 const shopItems = ShopItems.parse(JSON.parse(rawJson).value);
 
 const time = Date.now();
