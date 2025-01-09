@@ -2,8 +2,8 @@ import "../instrument";
 import "dotenv/config";
 import { z } from "zod";
 import { chromium } from "playwright";
-import { writeFile, exists, mkdir } from "fs/promises";
-import { readFile } from "fs/promises";
+import { writeFile, exists, mkdir } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 import { getSlackBlocks } from "./slack";
 import { diffItems } from "./diff";
 import { fromError as fromZodError } from "zod-validation-error";
@@ -85,7 +85,7 @@ if (!(await exists("latest.highseas"))) {
 	process.exit(0);
 }
 
-const previousTime = parseInt(await readFile("latest.highseas", "utf-8"));
+const previousTime = Number.parseInt(await readFile("latest.highseas", "utf-8"));
 console.log(`Reading previous data from data/${previousTime}.json`);
 const previousShopItems = ShopItems.parse(
 	JSON.parse(await readFile(`data/${previousTime}.json`, "utf-8"))
@@ -110,24 +110,24 @@ const response = await fetch(env.SLACK_WEBHOOK_URL, {
 console.log(JSON.stringify(blocks, null, 2));
 if (!response.ok) {
 	throw new Error(`Failed to send Slack message: ${response.statusText}`);
-} else {
-	await fetch(env.SLACK_WEBHOOK_URL, {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
-		},
-		body: JSON.stringify({
-			blocks: [
-				{
-					type: "section",
-					text: {
-						type: "mrkdwn",
-						text: "<!subteam^S083BPYJXE2> *- please reply to the message above*",
-					},
-				},
-			],
-		}),
-	});
 }
+
+await fetch(env.SLACK_WEBHOOK_URL, {
+	method: "POST",
+	headers: {
+		"Content-Type": "application/json",
+	},
+	body: JSON.stringify({
+		blocks: [
+			{
+				type: "section",
+				text: {
+					type: "mrkdwn",
+					text: "<!subteam^S083BPYJXE2> *- please reply to the message above*",
+				},
+			},
+		],
+	}),
+});
 
 await browser.close();

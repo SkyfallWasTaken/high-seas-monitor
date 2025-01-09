@@ -1,11 +1,11 @@
 import { getLastCommit } from "git-last-commit";
-import { promisify } from "util";
+import { promisify } from "node:util";
 const lastCommit = await promisify(getLastCommit)();
 import { version as pkgVersion } from "../package.json";
 
 export function getSlackBlocks(diffs: string[]) {
 	if (diffs.length === 0) return;
-	let blocks = [];
+	const blocks = [];
 	blocks.push({
 		type: "header",
 		text: {
