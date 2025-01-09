@@ -124,7 +124,7 @@ try {
 					type: "section",
 					text: {
 						type: "mrkdwn",
-						text: "<!subteam^S083BPYJXE2> *- please reply to the message above*",
+						text: `<!subteam^${env.SLACK_SUBTEAM_ID}> *- please reply to the message above*`,
 					},
 				},
 			],
