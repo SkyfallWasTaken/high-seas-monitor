@@ -71,14 +71,17 @@ if (shopItems.success === false) {
 }
 
 const time = Date.now();
-if (!(await exists("data"))) {
+
+const dataDirExists = await exists("data");
+const latestPtrExists = await exists("latest.highseas");
+if (!dataDirExists) {
 	console.warn("data directory does not exist, creating it.");
 	await mkdir("data");
 }
 
 await writeFile(`data/${time}.json`, JSON.stringify(shopItems.data, null, 2));
 
-if (!(await exists("latest.highseas"))) {
+if (!latestPtrExists) {
 	console.warn("latest.highseas does not exist, creating it and exiting.");
 	await writeFile("latest.highseas", time.toString());
 	await browser.close();
@@ -100,34 +103,33 @@ if (diffs.length === 0) {
 }
 
 const blocks = getSlackBlocks(diffs);
-const response = await fetch(env.SLACK_WEBHOOK_URL, {
-	method: "POST",
-	headers: {
-		"Content-Type": "application/json",
-	},
-	body: JSON.stringify(blocks),
-});
-console.log(JSON.stringify(blocks, null, 2));
-if (!response.ok) {
-	throw new Error(`Failed to send Slack message: ${response.statusText}`);
-}
 
-await fetch(env.SLACK_WEBHOOK_URL, {
-	method: "POST",
-	headers: {
-		"Content-Type": "application/json",
-	},
-	body: JSON.stringify({
-		blocks: [
-			{
-				type: "section",
-				text: {
-					type: "mrkdwn",
-					text: "<!subteam^S083BPYJXE2> *- please reply to the message above*",
+try {
+	await fetch(env.SLACK_WEBHOOK_URL, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify(blocks),
+	});
+
+	await fetch(env.SLACK_WEBHOOK_URL, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify({
+			blocks: [
+				{
+					type: "section",
+					text: {
+						type: "mrkdwn",
+						text: "<!subteam^S083BPYJXE2> *- please reply to the message above*",
+					},
 				},
-			},
-		],
-	}),
-});
-
-await browser.close();
+			],
+		}),
+	});
+} finally {
+	await browser.close();
+}

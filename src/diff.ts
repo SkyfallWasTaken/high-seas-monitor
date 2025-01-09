@@ -14,8 +14,7 @@ export function diffItem(oldItem: ShopItem, newItem: ShopItem) {
 	}
 	if (oldItem.subtitle !== newItem.subtitle) {
 		result.push(
-			`*Description:* ${oldItem.subtitle || "(none)"} → ${
-				newItem.subtitle || "(none)"
+			`*Description:* ${oldItem.subtitle || "(none)"} → ${newItem.subtitle || "(none)"
 			}`
 		);
 	}
@@ -42,22 +41,19 @@ export function diffItem(oldItem: ShopItem, newItem: ShopItem) {
 	// Status and Fulfillment
 	if (oldItem.comingSoon !== newItem.comingSoon) {
 		result.push(
-			`*Released:* ${!oldItem.comingSoon ? "Yes" : "No"} → ${
-				!newItem.comingSoon ? "Yes" : "No"
+			`*Released:* ${!oldItem.comingSoon ? "Yes" : "No"} → ${!newItem.comingSoon ? "Yes" : "No"
 			}`
 		);
 	}
 	if (oldItem.outOfStock !== newItem.outOfStock) {
 		result.push(
-			`*In Stock:* ${!oldItem.outOfStock ? "Yes" : "No"} → ${
-				!newItem.outOfStock ? "Yes" : "No"
+			`*In Stock:* ${!oldItem.outOfStock ? "Yes" : "No"} → ${!newItem.outOfStock ? "Yes" : "No"
 			}`
 		);
 	}
 	if (oldItem.fulfilledAtEnd !== newItem.fulfilledAtEnd) {
 		result.push(
-			`*Fulfilled at End:* ${oldItem.fulfilledAtEnd ? "Yes" : "No"} → ${
-				newItem.fulfilledAtEnd ? "Yes" : "No"
+			`*Fulfilled at End:* ${oldItem.fulfilledAtEnd ? "Yes" : "No"} → ${newItem.fulfilledAtEnd ? "Yes" : "No"
 			}`
 		);
 	}
@@ -77,16 +73,16 @@ export function diffItems(
 		if (!oldItem) {
 			result.push(
 				stripIndents`
-        *New item: :blobby-heavy_plus_sign:*
-        *Name:* ${newItem.name}
-        *Description:* ${newItem.subtitle || "(none)"}
-        *Regions:* ${regionText(newItem)}
-        *Price (US):* :doubloon: ${newItem.priceUs}
-        *Price (Global):* :doubloon: ${newItem.priceGlobal}
-        *Released:* ${!newItem.comingSoon ? "Yes" : "No"}
-        *In Stock:* ${!newItem.outOfStock ? "Yes" : "No"}
-        *Fulfilled at End:* ${newItem.fulfilledAtEnd ? "Yes" : "No"}
-        `.trim()
+        			*New item! :blobby-heavy_plus_sign:*
+        			*Name:* ${newItem.name}
+        			*Description:* ${newItem.subtitle || "(none)"}
+        			*Regions:* ${regionText(newItem)}
+        			*Price (US):* :doubloon: ${newItem.priceUs}
+        			*Price (Global):* :doubloon: ${newItem.priceGlobal}
+        			*Released:* ${!newItem.comingSoon ? "Yes" : "No"}
+        			*In Stock:* ${!newItem.outOfStock ? "Yes" : "No"}
+        			*Fulfilled at End:* ${newItem.fulfilledAtEnd ? "Yes" : "No"}
+        		`.trim()
 			);
 			continue;
 		}
@@ -95,21 +91,17 @@ export function diffItems(
 			if (!newItems.find((item) => item.id === oldItem.id)) {
 				result.push(
 					stripIndents`
-          *Deleted item: :tw_warning:*
-          *Name:* ${newItem.name}
-          *Description:* ${newItem.subtitle || "(none)"}
-          `.trim()
+          				*Deleted item! :tw_warning:*
+          				*Name:* ${oldItem.name}
+          				*Description:* ${oldItem.subtitle || "(none)"}
+          			`.trim()
 				);
 			}
 		}
 
-		try {
-			const diff = diffItem(oldItem, newItem);
-			if (diff) {
-				result.push(diff);
-			}
-		} catch (error) {
-			console.error(`Error diffing items with id ${newItem.id}:`, error);
+		const diff = diffItem(oldItem, newItem);
+		if (diff) {
+			result.push(diff);
 		}
 	}
 
