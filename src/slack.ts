@@ -31,7 +31,7 @@ export function getSlackBlocks(diffs: string[]) {
 		elements: [
 			{
 				type: "mrkdwn",
-				text: `high-seas-monitor v${pkgVersion} • commit ${lastCommit.shortHash}`,
+				text: `High Seas Monitor v${pkgVersion} • commit ${lastCommit.shortHash}`,
 			},
 		],
 	});
