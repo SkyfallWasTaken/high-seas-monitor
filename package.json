@@ -1,6 +1,6 @@
 {
 	"name": "high-seas-monitor",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"module": "src/index.ts",
 	"type": "module",
 	"scripts": {
