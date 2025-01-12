@@ -49,11 +49,11 @@ export function diffItem(oldItem: ShopItem, newItem: ShopItem) {
 	}
 
 	// Regions
-	// const oldRegions = regionText(oldItem);
-	// const newRegions = regionText(newItem);
-	// if (oldRegions !== newRegions) {
-	// 	result.push(`*Regions:* ${oldRegions} → ${newRegions}`);
-	// }
+	const oldRegions = regionText(oldItem);
+	const newRegions = regionText(newItem);
+	if (oldRegions !== newRegions) {
+		result.push(`*Regions:* ${oldRegions} → ${newRegions}`);
+	}
 
 	// Price
 	if (oldItem.priceUs !== newItem.priceUs) {
