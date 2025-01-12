@@ -14,8 +14,37 @@ export function diffItem(oldItem: ShopItem, newItem: ShopItem) {
 	}
 	if (oldItem.subtitle !== newItem.subtitle) {
 		result.push(
-			`*Description:* ${oldItem.subtitle || "(none)"} → ${newItem.subtitle || "(none)"
+			`*Subtitle:* ${oldItem.subtitle || "(none)"} → ${newItem.subtitle || "(none)"
 			}`
+		);
+	}
+	if (oldItem.description !== newItem.description) {
+		result.push(
+			`*Description:* ${oldItem.description || "(none)"} → ${newItem.description || "(none)"
+			}`
+		);
+	}
+	if (oldItem.customs_likely !== newItem.customs_likely) {
+		result.push(
+			`*Customs Likely:* ${oldItem.customs_likely ? "Yes" : "No"} → ${newItem.customs_likely ? "Yes" : "No"
+			}`
+		);
+	}
+	if (oldItem.fulfillment_description !== newItem.fulfillment_description) {
+		result.push(
+			`*Fulfillment Description:* ${oldItem.fulfillment_description || "(none)"} → ${newItem.fulfillment_description || "(none)"
+			}`
+		);
+	}
+	if (oldItem.limited_qty !== newItem.limited_qty) {
+		result.push(
+			`*Limited Quantity:* ${oldItem.limited_qty ? "Yes" : "No"} → ${newItem.limited_qty ? "Yes" : "No"
+			}`
+		);
+	}
+	if (oldItem.links !== newItem.links) {
+		result.push(
+			`*Links:* ${oldItem.links?.join(", ") || "(none)"} → ${newItem.links?.join(", ") || "(none)"}`
 		);
 	}
 
@@ -75,13 +104,21 @@ export function diffItems(
 				stripIndents`
         			*New item! :blobby-heavy_plus_sign:*
         			*Name:* ${newItem.name}
-        			*Description:* ${newItem.subtitle || "(none)"}
+					${newItem.subtitle ? `_${newItem.subtitle}_` : ""}${newItem.description ? `\n${newItem.description}` : ""}
         			*Regions:* ${regionText(newItem)}
+
         			*Price (US):* :doubloon: ${newItem.priceUs}
         			*Price (Global):* :doubloon: ${newItem.priceGlobal}
+
         			*Released:* ${!newItem.comingSoon ? "Yes" : "No"}
         			*In Stock:* ${!newItem.outOfStock ? "Yes" : "No"}
+					*Limited Quantity:* ${newItem.limited_qty ? "Yes" : "No"}
+					*Customs Likely:* ${newItem.customs_likely ? "Yes" : "No"}
+					
+					*Fulfillment Description:* ${newItem.fulfillment_description || "(none)"}
         			*Fulfilled at End:* ${newItem.fulfilledAtEnd ? "Yes" : "No"}
+
+					*Links:* ${newItem.links?.join(", ") || "(none)"}
         		`.trim()
 			);
 			continue;

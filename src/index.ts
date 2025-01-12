@@ -7,6 +7,8 @@ import { readFile } from "node:fs/promises";
 import { getSlackBlocks } from "./slack";
 import { diffItems } from "./diff";
 import { fromError as fromZodError } from "zod-validation-error";
+// @ts-ignore
+import htmlToMrkdwn from "html-to-mrkdwn";
 import ignoredItems from "../ignore.json";
 
 const Env = z.object({
@@ -30,6 +32,11 @@ const ShopItem = z.object({
 	fulfilledAtEnd: z.boolean(),
 	comingSoon: z.boolean(),
 	outOfStock: z.boolean(),
+	description: z.string().optional(),
+	customs_likely: z.boolean().optional(),
+	fulfillment_description: z.string().optional(),
+	links: z.array(z.string()).optional(),
+	limited_qty: z.boolean().optional(),
 });
 export type ShopItem = z.infer<typeof ShopItem>;
 const ShopItems = z.array(ShopItem);
@@ -62,9 +69,22 @@ if (!rawJson) {
 }
 const json = JSON.parse(rawJson);
 const items = json.value;
-const filteredItems = items.filter(
-	(item: { id: string }) => !ignoredItems.includes(item.id)
-);
+const filteredItems = items
+	.filter(
+		(item: { id: string }) => !ignoredItems.includes(item.id)
+	)
+	.map((item: ShopItem) => {
+		return {
+			...item,
+			links: item.links?.filter(Boolean),
+			fulfillment_description: htmlToMrkdwn(item.fulfillment_description),
+			description: htmlToMrkdwn(item.description),
+			subtitle: htmlToMrkdwn(item.subtitle),
+		};
+	});
+
+console.error(filteredItems)
+
 const shopItems = ShopItems.safeParse(filteredItems);
 if (shopItems.success === false) {
 	throw fromZodError(shopItems.error);
