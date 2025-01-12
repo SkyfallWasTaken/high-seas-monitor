@@ -133,6 +133,7 @@ try {
 		body: JSON.stringify(blocks),
 	});
 	if (initialResponse.status !== 200) {
+		console.error(blocks);
 		throw new Error(`Failed to send initial message: ${await initialResponse.text()}`);
 	}
 
