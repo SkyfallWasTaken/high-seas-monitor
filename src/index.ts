@@ -26,6 +26,7 @@ const ShopItem = z.object({
 	enabledIn: z.boolean(),
 	enabledXx: z.boolean(),
 	enabledCa: z.boolean(),
+	enabledAu: z.boolean().default(false),
 	priceUs: z.number(),
 	priceGlobal: z.number(),
 	fulfilledAtEnd: z.boolean(),

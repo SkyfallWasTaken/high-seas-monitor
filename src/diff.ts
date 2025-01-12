@@ -49,11 +49,11 @@ export function diffItem(oldItem: ShopItem, newItem: ShopItem) {
 	}
 
 	// Regions
-	const oldRegions = regionText(oldItem);
-	const newRegions = regionText(newItem);
-	if (oldRegions !== newRegions) {
-		result.push(`*Regions:* ${oldRegions} → ${newRegions}`);
-	}
+	// const oldRegions = regionText(oldItem);
+	// const newRegions = regionText(newItem);
+	// if (oldRegions !== newRegions) {
+	// 	result.push(`*Regions:* ${oldRegions} → ${newRegions}`);
+	// }
 
 	// Price
 	if (oldItem.priceUs !== newItem.priceUs) {
@@ -149,8 +149,9 @@ function regionText(item: ShopItem) {
 	const regions = [];
 	if (item.enabledUs) regions.push("US");
 	if (item.enabledEu) regions.push("EU + UK");
-	if (item.enabledIn) regions.push("IN");
-	if (item.enabledCa) regions.push("CA");
+	if (item.enabledIn) regions.push("India");
+	if (item.enabledCa) regions.push("Canada");
+	if (item.enabledAu) regions.push("Australia");
 	if (item.enabledXx) regions.push("Global");
 	return regions.join(", ");
 }
