@@ -73,13 +73,14 @@ const filteredItems = items
 	.filter(
 		(item: { id: string }) => !ignoredItems.includes(item.id)
 	)
-	.map((item: ShopItem) => {
+	.map((item) => {
 		return {
 			...item,
 			links: item.links?.filter(Boolean),
-			fulfillment_description: htmlToMrkdwn(item.fulfillment_description),
-			description: htmlToMrkdwn(item.description),
-			subtitle: htmlToMrkdwn(item.subtitle),
+			fulfillment_description:
+				item.fulfillment_description?.text && htmlToMrkdwn(item.fulfillment_description.text),
+			description: item.description?.text && htmlToMrkdwn(item.description.text),
+			subtitle: item.subtitle?.text && htmlToMrkdwn(item.subtitle.text),
 		};
 	});
 
