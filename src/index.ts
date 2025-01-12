@@ -7,8 +7,7 @@ import { readFile } from "node:fs/promises";
 import { getSlackBlocks } from "./slack";
 import { diffItems } from "./diff";
 import { fromError as fromZodError } from "zod-validation-error";
-// @ts-ignore
-import htmlToMrkdwn from "html-to-mrkdwn";
+import htmlToMrkdwn from "html-to-mrkdwn-ts";
 import ignoredItems from "../ignore.json";
 
 const Env = z.object({
@@ -78,9 +77,9 @@ const filteredItems = items
 			...item,
 			links: item.links?.filter(Boolean),
 			fulfillment_description:
-				item.fulfillment_description?.text && htmlToMrkdwn(item.fulfillment_description.text),
-			description: item.description?.text && htmlToMrkdwn(item.description.text),
-			subtitle: item.subtitle?.text && htmlToMrkdwn(item.subtitle.text),
+				item.fulfillment_description && htmlToMrkdwn(item.fulfillment_description).text,
+			description: item.description && htmlToMrkdwn(item.description).text,
+			subtitle: item.subtitle && htmlToMrkdwn(item.subtitle).text,
 		};
 	});
 
@@ -151,6 +150,8 @@ try {
 			],
 		}),
 	});
+} catch (error) {
+	console.error(error);
 } finally {
 	await browser.close();
 }

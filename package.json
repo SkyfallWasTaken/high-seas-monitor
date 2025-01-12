@@ -22,7 +22,7 @@
 		"cookie": "^1.0.1",
 		"dotenv": "^16.4.5",
 		"git-last-commit": "^1.0.1",
-		"html-to-mrkdwn": "^3.0.0",
+		"html-to-mrkdwn-ts": "^1.1.0",
 		"node-html-parser": "^6.1.13",
 		"playwright": "^1.48.2",
 		"zod": "^3.23.8",
