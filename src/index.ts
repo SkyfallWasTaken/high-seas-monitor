@@ -12,7 +12,7 @@ import ignoredItems from "../ignore.json";
 const Env = z.object({
 	HIGHSEAS_SESSION_TOKEN: z.string(),
 	SLACK_WEBHOOK_URL: z.string().url(),
-	SENTRY_DSN: z.string().url(),
+	SENTRY_DSN: z.string().url().optional(),
 	SLACK_SUBTEAM_ID: z.string(),
 });
 const ShopItem = z.object({
