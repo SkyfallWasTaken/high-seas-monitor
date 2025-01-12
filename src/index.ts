@@ -70,16 +70,15 @@ if (!rawJson) {
 const json = JSON.parse(rawJson);
 const items = json.value;
 const filteredItems = items
-	.filter(
-		(item: { id: string }) => !ignoredItems.includes(item.id)
-	)
+	.filter((item: { id: string }) => !ignoredItems.includes(item.id))
 	// biome-ignore lint/suspicious/noExplicitAny: I don't have time for this today.
 	.map((item: any) => {
 		return {
 			...item,
 			links: item.links?.filter(Boolean),
 			fulfillment_description:
-				item.fulfillment_description && htmlToMrkdwn(item.fulfillment_description).text,
+				item.fulfillment_description &&
+				htmlToMrkdwn(item.fulfillment_description).text,
 			description: item.description && htmlToMrkdwn(item.description).text,
 			subtitle: item.subtitle && htmlToMrkdwn(item.subtitle).text,
 		};
@@ -108,7 +107,9 @@ if (!latestPtrExists) {
 	process.exit(0);
 }
 
-const previousTime = Number.parseInt(await readFile("latest.highseas", "utf-8"));
+const previousTime = Number.parseInt(
+	await readFile("latest.highseas", "utf-8")
+);
 console.log(`Reading previous data from data/${previousTime}.json`);
 const previousShopItems = ShopItems.parse(
 	JSON.parse(await readFile(`data/${previousTime}.json`, "utf-8"))
@@ -134,7 +135,9 @@ try {
 	});
 	if (initialResponse.status !== 200) {
 		console.error(blocks);
-		throw new Error(`Failed to send initial message: ${await initialResponse.text()}`);
+		throw new Error(
+			`Failed to send initial message: ${await initialResponse.text()}`
+		);
 	}
 
 	const finalResponse = await fetch(env.SLACK_WEBHOOK_URL, {
@@ -155,7 +158,9 @@ try {
 		}),
 	});
 	if (finalResponse.status !== 200) {
-		throw new Error(`Failed to send final message: ${await finalResponse.text()}`);
+		throw new Error(
+			`Failed to send final message: ${await finalResponse.text()}`
+		);
 	}
 } catch (error) {
 	console.error(error);

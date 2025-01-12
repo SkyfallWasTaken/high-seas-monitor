@@ -14,31 +14,36 @@ export function diffItem(oldItem: ShopItem, newItem: ShopItem) {
 	}
 	if (oldItem.subtitle !== newItem.subtitle) {
 		result.push(
-			`*Subtitle:* ${oldItem.subtitle || "(none)"} → ${newItem.subtitle || "(none)"
+			`*Subtitle:* ${oldItem.subtitle || "(none)"} → ${
+				newItem.subtitle || "(none)"
 			}`
 		);
 	}
 	if (oldItem.description !== newItem.description) {
 		result.push(
-			`*Description:* ${oldItem.description || "(none)"} → ${newItem.description || "(none)"
+			`*Description:* ${oldItem.description || "(none)"} → ${
+				newItem.description || "(none)"
 			}`
 		);
 	}
 	if (oldItem.customs_likely !== newItem.customs_likely) {
 		result.push(
-			`*Customs Likely:* ${oldItem.customs_likely ? "Yes" : "No"} → ${newItem.customs_likely ? "Yes" : "No"
+			`*Customs Likely:* ${oldItem.customs_likely ? "Yes" : "No"} → ${
+				newItem.customs_likely ? "Yes" : "No"
 			}`
 		);
 	}
 	if (oldItem.fulfillment_description !== newItem.fulfillment_description) {
 		result.push(
-			`*Fulfillment Description:* ${oldItem.fulfillment_description || "(none)"} → ${newItem.fulfillment_description || "(none)"
+			`*Fulfillment Description:* ${oldItem.fulfillment_description || "(none)"} → ${
+				newItem.fulfillment_description || "(none)"
 			}`
 		);
 	}
 	if (oldItem.limited_qty !== newItem.limited_qty) {
 		result.push(
-			`*Limited Quantity:* ${oldItem.limited_qty ? "Yes" : "No"} → ${newItem.limited_qty ? "Yes" : "No"
+			`*Limited Quantity:* ${oldItem.limited_qty ? "Yes" : "No"} → ${
+				newItem.limited_qty ? "Yes" : "No"
 			}`
 		);
 	}
@@ -70,19 +75,22 @@ export function diffItem(oldItem: ShopItem, newItem: ShopItem) {
 	// Status and Fulfillment
 	if (oldItem.comingSoon !== newItem.comingSoon) {
 		result.push(
-			`*Released:* ${!oldItem.comingSoon ? "Yes" : "No"} → ${!newItem.comingSoon ? "Yes" : "No"
+			`*Released:* ${!oldItem.comingSoon ? "Yes" : "No"} → ${
+				!newItem.comingSoon ? "Yes" : "No"
 			}`
 		);
 	}
 	if (oldItem.outOfStock !== newItem.outOfStock) {
 		result.push(
-			`*In Stock:* ${!oldItem.outOfStock ? "Yes" : "No"} → ${!newItem.outOfStock ? "Yes" : "No"
+			`*In Stock:* ${!oldItem.outOfStock ? "Yes" : "No"} → ${
+				!newItem.outOfStock ? "Yes" : "No"
 			}`
 		);
 	}
 	if (oldItem.fulfilledAtEnd !== newItem.fulfilledAtEnd) {
 		result.push(
-			`*Fulfilled at End:* ${oldItem.fulfilledAtEnd ? "Yes" : "No"} → ${newItem.fulfilledAtEnd ? "Yes" : "No"
+			`*Fulfilled at End:* ${oldItem.fulfilledAtEnd ? "Yes" : "No"} → ${
+				newItem.fulfilledAtEnd ? "Yes" : "No"
 			}`
 		);
 	}
