@@ -72,7 +72,8 @@ const filteredItems = items
 	.filter(
 		(item: { id: string }) => !ignoredItems.includes(item.id)
 	)
-	.map((item) => {
+	// biome-ignore lint/suspicious/noExplicitAny: I don't have time for this today.
+	.map((item: any) => {
 		return {
 			...item,
 			links: item.links?.filter(Boolean),
@@ -82,8 +83,6 @@ const filteredItems = items
 			subtitle: item.subtitle && htmlToMrkdwn(item.subtitle).text,
 		};
 	});
-
-console.error(filteredItems)
 
 const shopItems = ShopItems.safeParse(filteredItems);
 if (shopItems.success === false) {
@@ -125,15 +124,18 @@ if (diffs.length === 0) {
 const blocks = getSlackBlocks(diffs);
 
 try {
-	await fetch(env.SLACK_WEBHOOK_URL, {
+	const initialResponse = await fetch(env.SLACK_WEBHOOK_URL, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
 		},
 		body: JSON.stringify(blocks),
 	});
+	if (initialResponse.status !== 200) {
+		throw new Error(`Failed to send initial message: ${await initialResponse.text()}`);
+	}
 
-	await fetch(env.SLACK_WEBHOOK_URL, {
+	const finalResponse = await fetch(env.SLACK_WEBHOOK_URL, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
@@ -150,6 +152,9 @@ try {
 			],
 		}),
 	});
+	if (finalResponse.status !== 200) {
+		throw new Error(`Failed to send final message: ${await finalResponse.text()}`);
+	}
 } catch (error) {
 	console.error(error);
 } finally {

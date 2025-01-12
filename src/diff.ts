@@ -42,7 +42,7 @@ export function diffItem(oldItem: ShopItem, newItem: ShopItem) {
 			}`
 		);
 	}
-	if (oldItem.links !== newItem.links) {
+	if (!deepEquals(oldItem.links, newItem.links)) {
 		result.push(
 			`*Links:* ${oldItem.links?.join(", ") || "(none)"} → ${newItem.links?.join(", ") || "(none)"}`
 		);
