@@ -20,7 +20,7 @@ const ShopItem = z.object({
 	id: z.string(),
 	name: z.string(),
 	subtitle: z.string().optional(),
-	imageUrl: z.string(),
+	imageUrl: z.string().optional(),
 	enabledUs: z.boolean(),
 	enabledEu: z.boolean(),
 	enabledIn: z.boolean(),
